@@ -16,7 +16,9 @@ public class LogisticRegression extends AppCompatActivity {
     private double fpr;
     private double fnr;
     private double hter;
-    private long totalTime;
+    private long TrainTime;
+    private long TestTime;
+    private long ExecutionTime;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,18 +35,25 @@ public class LogisticRegression extends AppCompatActivity {
         Instances testSet = helper.setTestDate(context, trainSize, testSize);
         Instances trainSet = helper.setTrainData(context, trainSize, testSize);
         /** Classifier here is Logistic Regression */
-
+        //trainSet.setClassIndex(10);
         Classifier classifier = new Logistic();
          //train the alogorithm with the training dataset
-        long startTime = System.currentTimeMillis();
+        long startTrain = System.currentTimeMillis();
         classifier.buildClassifier(trainSet);
+        long stopTrain = System.currentTimeMillis();
+         setTrainTime(stopTrain-startTrain);
         //test the model using the testing dataset
+        long startTest=System.currentTimeMillis();
         Evaluation eval = new Evaluation(testSet);
         eval.evaluateModel(classifier, testSet);
+        long stopTest=System.currentTimeMillis();
         /** Print the algorithm summary */
+         setTestTime(stopTest- startTest);
+         setExecutionTime(getTrainTime() + getTestTime());
         System.out.println("Evaluate Breast Cancer Dataset using Logistic Regression");
         System.out.println(eval.toSummaryString());
         System.out.println(classifier);
+
         //finding various parameters
          setTpr(eval.truePositiveRate(0));
         System.out.println("The True positive rate is " + getTpr());
@@ -57,10 +66,8 @@ public class LogisticRegression extends AppCompatActivity {
          setHter((getFpr() + getFnr())/2);
         System.out.println("The HTE rate is " + getHter());
 
-        //finding the total time of execution for testing
-        long endTime   = System.currentTimeMillis();
-        setTotalTime(endTime - startTime);
-        System.out.println("The Execution Time is " + getTotalTime());
+        //finding the total time of execution for testimg
+
     }
 
     public double getTpr() {
@@ -103,11 +110,28 @@ public class LogisticRegression extends AppCompatActivity {
         this.hter = hter;
     }
 
-    public long getTotalTime() {
-        return totalTime;
+
+    public long getTrainTime() {
+        return TrainTime;
     }
 
-    public void setTotalTime(long totalTime) {
-        this.totalTime = totalTime;
+    public void setTrainTime(long trainTime) {
+        TrainTime = trainTime;
+    }
+
+    public long getTestTime() {
+        return TestTime;
+    }
+
+    public void setTestTime(long testTime) {
+        TestTime = testTime;
+    }
+
+    public long getExecutionTime() {
+        return ExecutionTime;
+    }
+
+    public void setExecutionTime(long executionTime) {
+        ExecutionTime = executionTime;
     }
 }
