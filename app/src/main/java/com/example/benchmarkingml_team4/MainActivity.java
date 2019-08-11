@@ -77,20 +77,23 @@ public class MainActivity extends AppCompatActivity {
                     ReadDataSet data = new ReadDataSet();
                     BufferedReader reader = data.readDataFile(context, R.raw.breastcancer);
                     int algorithmCount = 0;
-                    //int algorithmCount = 0;
                     Toast.makeText(MainActivity.this, "Please wait for results.", Toast.LENGTH_SHORT).show();
                     if (knn.isChecked()) {
                         algorithmCount++;
-                        //ReadDataSet data = new ReadDataSet();
-                        data.readDataFile(context, R.raw.breastcancer);
 
                     }
                     if (dt.isChecked()) {
                         algorithmCount++;
 
                     }
-                    if (lr.isChecked()) { algorithmCount++;
-                    try { Instances lr_inatance = new Instances(reader); } catch (IOException e) { e.printStackTrace(); } }
+                    if (lr.isChecked()) {
+                        algorithmCount++;
+                        try {
+                            Instances lr_inatance = new Instances(reader);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     if (rf.isChecked()) {
                         algorithmCount++;
 
