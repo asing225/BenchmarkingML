@@ -1,79 +1,60 @@
 package com.example.benchmarkingml_team4;
-
-import android.content.Context;
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import java.io.IOException;
-
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.functions.Logistic;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ArffLoader;
+/*The following class is used to classify the breast cancer dataset and also evaluates the efficiency of the algorithm using
+* various metrics such as RMSE,TAR,FAR,NAR,HTER and execution times
+*/
 public class LogisticRegression extends AppCompatActivity {
-
-    /** file names are defined*/
-    public static final String TRAINING_DATA_SET_FILENAME="breast-cancer.arff";
-    public static final String TESTING_DATA_SET_FILENAME="breast-cancer.arff";
-
-    //public static final String PREDICTION_DATA_SET_FILENAME="weather.nominal-confused.arff";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.result_page);
 
     }
-
-    public static Instances getDataSet(String fileName) throws IOException {
-
-        int classIdx = 1;
-        /** the arffloader to load the arff file */
-        ArffLoader loader = new ArffLoader();
-
-        /** load the traing data */
-        //loader.setSource(LogisticRegression.class.getResourceAsStream("/" + fileName));
-        ReadDataSet data=new ReadDataSet();
-        //data.readDataFile();
-        /**
-         * we can also set the file like loader3.setFile(new
-         * File("test-confused.arff"));
-         */
-        Instances dataSet = loader.getDataSet();
-        /** set the index based on the data given in the arff files */
-        dataSet.setClassIndex(classIdx);
-        return dataSet;
-    }
-
     /**
-     * This method is used to process the input and return the statistics.
+     * This method is used to classify the Breast Cancer dataset into recurrence and non-recurrence events
+     * The classifier used is Logistic Regression
      * @param context
      */
-    public static void process(Context context,int trainSize,int testSize) throws Exception {
-
-        Instances trainingDataSet = getDataSet(trainSize);
-        Instances testingDataSet = getDataSet(testSize);
-        /** Classifier here is Linear Regression */
+    public void process(Instances context, int trainSize, int testSize) throws Exception {
+        MLHelper helper = new MLHelper();
+        Instances testSet = helper.setTestDate(context, trainSize, testSize);
+        Instances trainSet = helper.setTrainData(context, trainSize, testSize);
+        /** Classifier here is Logistic Regression */
+        long startTime = System.currentTimeMillis();
         Classifier classifier = new Logistic();
-        /** */
-        classifier.buildClassifier(trainingDataSet);
-        /**
-         * train the alogorithm with the training data and evaluate the
-         * algorithm with testing data
-         */
-        Evaluation eval = new Evaluation(trainingDataSet);
-        eval.evaluateModel(classifier, testingDataSet);
+         //train the alogorithm with the training dataset
+        classifier.buildClassifier(trainSet);
+        //test the model using the testing dataset
+        Evaluation eval = new Evaluation(testSet);
+        eval.evaluateModel(classifier, testSet);
         /** Print the algorithm summary */
-        System.out.println("** Logistic Regression Evaluation with Datasets **");
+        System.out.println("Evaluate Breast Cancer Dataset using Logistic Regression");
         System.out.println(eval.toSummaryString());
-        System.out.println(classifier);
+        //System.out.println(classifier);
+        //finding various parameters
+        double tpr= eval.truePositiveRate(0);
+        System.out.println("The True positive rate is " +tpr);
+        double tnr= eval.trueNegativeRate(0);
+        System.out.println("The True negative rate is " +tnr);
+        double fpr  = eval.falsePositiveRate(0);
+        System.out.println("The False positive rate is " +fpr);
+        double fnr= eval.falseNegativeRate(0);
+        System.out.println("The False negative rate is " +fnr);
+        double hter=(fpr+fnr)/2;
+        System.out.println("The HTE rate is " +hter);
 
-        Instance predicationDataSet = getDataSet(TESTING_DATA_SET_FILENAME).lastInstance();
-        double value = classifier.classifyInstance(predicationDataSet);
-        /** Prediction Output */
-        System.out.println(value);
+        //finding the total time of execution for testing
+        long endTime   = System.currentTimeMillis();
+        long totalTime = endTime - startTime;
+        System.out.println("The Execution Time is " + totalTime);
     }
 
 }
