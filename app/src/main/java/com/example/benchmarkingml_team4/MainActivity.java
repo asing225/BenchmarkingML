@@ -90,10 +90,17 @@ public class MainActivity extends AppCompatActivity {
                         KNN knnAlgo = new KNN();
                         try {
                             knnAlgo.processKNN(instance, trainSize, testSize, k);
+                            passData.putExtra("trainTime_knn", knnAlgo.getTrainTime());
+                            passData.putExtra("testTime_knn", knnAlgo.getTestTime());
+                            passData.putExtra("falsePositiveRate_knn", knnAlgo.getFalsePositiveRate());
+                            passData.putExtra("falseNegativeRate_knn", knnAlgo.getFalseNegativeRate());
+                            passData.putExtra("HTER_knn", knnAlgo.getHter());
+                            passData.putExtra("trueNegativeRate_knn", knnAlgo.getTrueNegativeRate());
+                            passData.putExtra("truePositiverate_knn", knnAlgo.getTruePositiveRate());
+                            passData.putExtra("algoSummary_knn", knnAlgo.getTruePositiveRate());
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        passData.putExtra("trainTime", knnAlgo.getTrainTime());
                     }
                     if (dt.isChecked()) {
                         algorithmCount++;
@@ -104,12 +111,14 @@ public class MainActivity extends AppCompatActivity {
                         LogisticRegression lr= new LogisticRegression();
                         try {
                             lr.process(instance,trainSize,testSize);
-                            lr.getTpr();
-                            lr.getTnr();
-                            lr.getFnr();
-                            lr.getFpr();
-                            lr.getHter();
-                            lr.getTotalTime();
+                            //passData.putExtra("trainTime_knn", lr.getTpr());
+                            //passData.putExtra("testTime_knn", lr.);
+                            passData.putExtra("falsePositiveRate_lr", lr.getFpr());
+                            passData.putExtra("falseNegativeRate_lr", lr.getFnr());
+                            passData.putExtra("HTER_lr", lr.getHter());
+                            passData.putExtra("trueNegativeRate_lr", lr.getTnr());
+                            passData.putExtra("truePositiverate_lr", lr.getTpr());
+                            //passData.putExtra("algoSummary_lr", );
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -128,6 +137,5 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        startActivity(passData);
     }
 }
