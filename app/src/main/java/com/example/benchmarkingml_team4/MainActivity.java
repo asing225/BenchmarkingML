@@ -102,6 +102,19 @@ public class MainActivity extends AppCompatActivity {
                     }
                     if (rf.isChecked()) {
                         algorithmCount++;
+                        Randomforest rf = new Randomforest();
+                        try{
+                                rf.process_RF(instance,trainSize,testSize);
+                                rf.getTruePositiveRate();
+                                rf.getTrueNegativeRate();
+                                rf.getFalseNegativeRate();
+                                rf.getFalsePositiveRate();
+                                rf.getHter();
+
+                        }
+                        catch (Exception e){
+                            e.printStackTrace();
+                        }
 
                     }
                     if (algorithmCount == 0) {
@@ -114,5 +127,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+<<<<<<< Updated upstream
+=======
+        //startActivity(passData);
+>>>>>>> Stashed changes
     }
 }
