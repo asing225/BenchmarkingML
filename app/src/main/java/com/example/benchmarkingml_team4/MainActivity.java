@@ -99,6 +99,18 @@ public class MainActivity extends AppCompatActivity {
                     }
                     if (lr.isChecked()) {
                         algorithmCount++;
+                        LogisticRegression lr= new LogisticRegression();
+                        try {
+                            lr.process(instance,trainSize,testSize);
+                            lr.getTpr();
+                            lr.getTnr();
+                            lr.getFnr();
+                            lr.getFpr();
+                            lr.getHter();
+                            lr.getTotalTime();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                     if (rf.isChecked()) {
                         algorithmCount++;
