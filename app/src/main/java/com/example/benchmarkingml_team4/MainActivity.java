@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         classify.setOnClickListener(new View.OnClickListener() {
-            Context con = MainActivity.this;
+            Context context = MainActivity.this;
             @Override
             public void onClick(View v) {
 
@@ -73,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Please wait for results.", Toast.LENGTH_SHORT).show();
                     if (knn.isChecked()) {
                         algorithmCount++;
+                        ReadDataSet data = new ReadDataSet();
+                        data.readDataFile(context, R.raw.breastcancer);
 
                     }
                     if (dt.isChecked()) {
