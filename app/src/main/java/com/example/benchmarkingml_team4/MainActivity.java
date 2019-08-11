@@ -13,6 +13,11 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+
+import weka.core.Instances;
+
 public class MainActivity extends AppCompatActivity {
 
     CheckBox knn, dt, lr, rf;
@@ -69,12 +74,12 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Please choose value between 1 and 100", Toast.LENGTH_LONG).show();
                 }
                 else {
+                    ReadDataSet data = new ReadDataSet();
+                    BufferedReader reader = data.readDataFile(context, R.raw.breastcancer);
                     int algorithmCount = 0;
                     Toast.makeText(MainActivity.this, "Please wait for results.", Toast.LENGTH_SHORT).show();
                     if (knn.isChecked()) {
                         algorithmCount++;
-                        ReadDataSet data = new ReadDataSet();
-                        data.readDataFile(context, R.raw.breastcancer);
 
                     }
                     if (dt.isChecked()) {
@@ -83,7 +88,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                     if (lr.isChecked()) {
                         algorithmCount++;
-
+                        try {
+                            Instances lr_inatance = new Instances(reader);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                     if (rf.isChecked()) {
                         algorithmCount++;
