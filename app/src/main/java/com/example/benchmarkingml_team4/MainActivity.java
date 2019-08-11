@@ -5,12 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.SeekBar;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -21,9 +20,10 @@ import weka.core.Instances;
 public class MainActivity extends AppCompatActivity {
 
     CheckBox knn, dt, lr, rf;
+    EditText kvalue;
     SeekBar seek;
     Button classify;
-    int trainSize = 0, testSize = 0, splitRatio = 1;
+    int trainSize = 0, testSize = 0, splitRatio = 1, k = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +34,10 @@ public class MainActivity extends AppCompatActivity {
         dt = (CheckBox) findViewById(R.id.dt);
         lr = (CheckBox) findViewById(R.id.lr);
         rf = (CheckBox) findViewById(R.id.rf);
+        kvalue = (EditText) findViewById(R.id.k_value);
 
         classify = (Button) findViewById(R.id.classify);
         seek = (SeekBar) findViewById(R.id.seekBar);
-        //splitRatio = seek.getProgress();
-
         seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int newVal = 0;
             @Override
@@ -76,11 +75,23 @@ public class MainActivity extends AppCompatActivity {
                 else {
                     ReadDataSet data = new ReadDataSet();
                     BufferedReader reader = data.readDataFile(context, R.raw.breastcancer);
+                    Instances instance = null;
+                    try {
+                         instance = new Instances(reader);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     int algorithmCount = 0;
                     Toast.makeText(MainActivity.this, "Please wait for results.", Toast.LENGTH_SHORT).show();
                     if (knn.isChecked()) {
+                        k = Integer.parseInt(kvalue.getText().toString());
                         algorithmCount++;
-
+                        KNN knn = new KNN();
+                        try {
+                            knn.processKNN(instance, trainSize, testSize, k);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                     if (dt.isChecked()) {
                         algorithmCount++;
@@ -88,11 +99,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                     if (lr.isChecked()) {
                         algorithmCount++;
-                        try {
-                            Instances lr_inatance = new Instances(reader);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
                     }
                     if (rf.isChecked()) {
                         algorithmCount++;
