@@ -1,5 +1,6 @@
 package com.example.benchmarkingml_team4;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,7 +34,9 @@ public class LogisticRegression extends AppCompatActivity {
         ArffLoader loader = new ArffLoader();
 
         /** load the traing data */
-        loader.setSource(LogisticRegression.class.getResourceAsStream("/" + fileName));
+        //loader.setSource(LogisticRegression.class.getResourceAsStream("/" + fileName));
+        ReadDataSet data=new ReadDataSet();
+        //data.readDataFile();
         /**
          * we can also set the file like loader3.setFile(new
          * File("test-confused.arff"));
@@ -46,11 +49,12 @@ public class LogisticRegression extends AppCompatActivity {
 
     /**
      * This method is used to process the input and return the statistics.
+     * @param context
      */
-    public static void process() throws Exception {
+    public static void process(Context context,int trainSize,int testSize) throws Exception {
 
-        Instances trainingDataSet = getDataSet(TRAINING_DATA_SET_FILENAME);
-        Instances testingDataSet = getDataSet(TESTING_DATA_SET_FILENAME);
+        Instances trainingDataSet = getDataSet(trainSize);
+        Instances testingDataSet = getDataSet(testSize);
         /** Classifier here is Linear Regression */
         Classifier classifier = new Logistic();
         /** */
