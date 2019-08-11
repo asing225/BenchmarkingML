@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        final Intent passData = new Intent();
         classify.setOnClickListener(new View.OnClickListener() {
             Context context = MainActivity.this;
             @Override
@@ -86,12 +87,13 @@ public class MainActivity extends AppCompatActivity {
                     if (knn.isChecked()) {
                         k = Integer.parseInt(kvalue.getText().toString());
                         algorithmCount++;
-                        KNN knn = new KNN();
+                        KNN knnAlgo = new KNN();
                         try {
-                            knn.processKNN(instance, trainSize, testSize, k);
+                            knnAlgo.processKNN(instance, trainSize, testSize, k);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                        passData.putExtra("trainTime", knnAlgo.getTrainTime());
                     }
                     if (dt.isChecked()) {
                         algorithmCount++;
@@ -99,6 +101,18 @@ public class MainActivity extends AppCompatActivity {
                     }
                     if (lr.isChecked()) {
                         algorithmCount++;
+                        LogisticRegression lr= new LogisticRegression();
+                        try {
+                            lr.process(instance,trainSize,testSize);
+                            lr.getTpr();
+                            lr.getTnr();
+                            lr.getFnr();
+                            lr.getFpr();
+                            lr.getHter();
+                            lr.getTotalTime();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                     if (rf.isChecked()) {
                         algorithmCount++;
@@ -114,5 +128,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        startActivity(passData);
     }
 }
