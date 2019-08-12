@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+
 import weka.core.Instances;
 
 public class MainActivity extends AppCompatActivity {
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //final Intent passData = new Intent(MainActivity.this, ResultPage.class);
+
         classify.setOnClickListener(new View.OnClickListener() {
             Context context = MainActivity.this;
             @Override
@@ -83,17 +84,16 @@ public class MainActivity extends AppCompatActivity {
                     }
                     int algorithmCount = 0;
                     Toast.makeText(MainActivity.this, "Please wait for results.", Toast.LENGTH_SHORT).show();
-
                     if (knn.isChecked()) {
                         k = Integer.parseInt(kvalue.getText().toString());
                         algorithmCount++;
-                        KNN knnAlgo = new KNN();
+                        KNN knn = new KNN();
                         try {
-                            knnAlgo.processKNN(instance, trainSize, testSize, k);
+                            knn.processKNN(instance, trainSize, testSize, k);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        //passData.putExtra("trainTime", knnAlgo.getTrainTime());
+
                     }
                     if (dt.isChecked()) {
                         algorithmCount++;
@@ -116,20 +116,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                     if (lr.isChecked()) {
                         algorithmCount++;
-                        LogisticRegression lr= new LogisticRegression();
-                        try {
-                            lr.process(instance,trainSize,testSize);
-                            lr.getTpr( );
-                            lr.getTnr();
-                            lr.getFnr();
-                            lr.getFpr();
-                            lr.getHter();
-                            lr.getExecutionTime();
-                            lr.getTestTime();
-                            lr.getTrainTime();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
                     }
                     if (rf.isChecked()) {
                         algorithmCount++;
@@ -140,7 +126,10 @@ public class MainActivity extends AppCompatActivity {
                                 rf.getTrueNegativeRate();
                                 rf.getFalseNegativeRate();
                                 rf.getFalsePositiveRate();
+                                rf.getTrainTime();
+                                rf.getTestTime();
                                 rf.getHter();
+                                rf.getExecution_Time();
 
                         }
                         catch (Exception e){
@@ -158,5 +147,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
     }
 }
