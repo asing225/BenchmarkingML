@@ -12,7 +12,9 @@ public class DecisionTree {
     private double fpRate;
     private double fnRate;
     private double hter;
-    private long totalTime;
+    private long totalRunTime;
+    private long TrainTime;
+    private long TestTime;
 
     // Calls the DecisionTree classifier and calculates the variables
     public void process(Instances context, int trainSize, int testSize) throws Exception {
@@ -20,31 +22,31 @@ public class DecisionTree {
         Instances testSet = helper.setTestDate(context, trainSize, testSize);
         Instances trainSet = helper.setTrainData(context, trainSize, testSize);
         Classifier classifier = new REPTree();
-        long startTime = System.currentTimeMillis();
-        // training the dataset
+
+        long startTrain = System.currentTimeMillis();
         classifier.buildClassifier(trainSet);
-        //testing the dataset
+        long stopTrain = System.currentTimeMillis();
+        setTrainTime(stopTrain-startTrain);
+        long startTest=System.currentTimeMillis();
         Evaluation eval = new Evaluation(testSet);
         eval.evaluateModel(classifier, testSet);
-        /** Print the algorithm summary */
-        System.out.println("Evaluate Breast Cancer Dataset using Decision Tree");
+        long stopTest=System.currentTimeMillis();
+        setTestTime(stopTest- startTest);
+        //Calculating total run time
+        setTotalRunTime(getTrainTime() + getTestTime());
+        System.out.println("Evaluate Breast Cancer Dataset using Decision Tree Algorithm using WEKA");
         System.out.println(eval.toSummaryString());
         System.out.println(classifier);
         setTpRate(eval.truePositiveRate(0));
         System.out.println("The True positive rate is " + getTpRate());
         setTnRate(eval.trueNegativeRate(0));
         System.out.println("The True negative rate is " + getTnRate());
-        setFpr(eval.falsePositiveRate(0));
+        setFpRate(eval.falsePositiveRate(0));
         System.out.println("The False positive rate is " + getFpRate());
         setFnRate(eval.falseNegativeRate(0));
         System.out.println("The False negative rate is " + getFnRate());
         setHter((getFpRate() + getFnRate())/2);
         System.out.println("The HTE rate is " + getHter());
-
-        //finding the total time of execution
-        long endTime   = System.currentTimeMillis();
-        setTotalTime(endTime - startTime);
-        System.out.println("The Execution Time is " + getTotalTime());
     }
 
     public double getTpRate() {
@@ -67,7 +69,7 @@ public class DecisionTree {
         return fpRate;
     }
 
-    public void setFpr(double fpr) {
+    public void setFpRate(double fpr) {
         this.fpRate = fpr;
     }
 
@@ -87,11 +89,28 @@ public class DecisionTree {
         this.hter = hter;
     }
 
-    public long getTotalTime() {
-        return totalTime;
+
+    public long getTrainTime() {
+        return TrainTime;
     }
 
-    public void setTotalTime(long totalTime) {
-        this.totalTime = totalTime;
+    public void setTrainTime(long trainTime) {
+        this.TrainTime = trainTime;
+    }
+
+    public long getTestTime() {
+        return TestTime;
+    }
+
+    public void setTestTime(long testTime) {
+        this.TestTime = testTime;
+    }
+
+    public long getTotalRunTime() {
+        return totalRunTime;
+    }
+
+    public void setTotalRunTime(long runTime) {
+        this.totalRunTime = runTime;
     }
 }
