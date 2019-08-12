@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-
 import weka.core.Instances;
 
 public class MainActivity extends AppCompatActivity {
@@ -84,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     int algorithmCount = 0;
                     Toast.makeText(MainActivity.this, "Please wait for results.", Toast.LENGTH_SHORT).show();
+
                     if (knn.isChecked()) {
                         k = Integer.parseInt(kvalue.getText().toString());
                         algorithmCount++;
@@ -104,12 +104,14 @@ public class MainActivity extends AppCompatActivity {
                         LogisticRegression lr= new LogisticRegression();
                         try {
                             lr.process(instance,trainSize,testSize);
-                            lr.getTpr();
+                            lr.getTpr( );
                             lr.getTnr();
                             lr.getFnr();
                             lr.getFpr();
                             lr.getHter();
-                            lr.getTotalTime();
+                            lr.getExecutionTime();
+                            lr.getTestTime();
+                            lr.getTrainTime();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
