@@ -106,7 +106,10 @@ public class MainActivity extends AppCompatActivity {
                             decisionTree.getFnRate();
                             decisionTree.getFpRate();
                             decisionTree.getHter();
-                            decisionTree.getTotalTime();
+                            decisionTree.getTrainTime();
+                            decisionTree.getTestTime();
+                            decisionTree.getTotalRunTime();
+
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
