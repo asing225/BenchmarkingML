@@ -12,7 +12,7 @@ import weka.core.Instances;
 public class Randomforest extends AppCompatActivity {
 
     private long Train_Time, Test_Time;
-    private double False_Positive_Rate, False_Negative_Rate, hter, True_Positive_Rate, True_Negative_Rate;
+    private double False_Positive_Rate, False_Negative_Rate, hter, True_Positive_Rate, True_Negative_Rate,Execution_Time;
     private String algoSummary;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +49,8 @@ public class Randomforest extends AppCompatActivity {
         True_Positive_Rate = eval.truePositiveRate(0);
         True_Negative_Rate = eval.trueNegativeRate(0);
         algoSummary = eval.toSummaryString();
+        Execution_Time = getTestTime()+getTestTime();
+
     }
 
     public long getTrainTime() {
@@ -78,7 +80,9 @@ public class Randomforest extends AppCompatActivity {
     public double getTrueNegativeRate() {
         return True_Negative_Rate;
     }
-
+    public double getExecution_Time(){
+        return Execution_Time;
+    }
     public String getAlgoSummary() {
         return algoSummary;
     }
