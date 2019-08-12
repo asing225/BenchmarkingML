@@ -3,51 +3,73 @@ package com.example.benchmarkingml_team4;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.lazy.IBk;
-import weka.core.Instance;
 import weka.core.Instances;
-import weka.core.neighboursearch.LinearNNSearch;
-import weka.core.neighboursearch.NearestNeighbourSearch;
 
 public class KNN {
 
-    public void processKNN(Instances data, int trainSize, int testSize, int k) throws Exception {
-        MLHelper helper = new MLHelper();
-        Instances testSet = helper.setTestDate(data, trainSize, testSize);
-        Instances trainSet = helper.setTrainData(data, trainSize, testSize);
+    private long trainTime, testTime;
+    private double falsePositiveRate, falseNegativeRate, hter, truePositiveRate, trueNegativeRate;
+    private String algoSummary;
 
-//        NearestNeighbourSearch knn_helper = new NearestNeighbourSearch() {
-//            @Override
-//            public Instance nearestNeighbour(Instance instance) throws Exception {
-//                return null;
-//            }
-//
-//            @Override
-//            public Instances kNearestNeighbours(Instance instance, int i) throws Exception {
-//                return null;
-//            }
-//
-//            @Override
-//            public double[] getDistances() throws Exception {
-//                return new double[0];
-//            }
-//
-//            @Override
-//            public void update(Instance instance) throws Exception {
-//
-//            }
-//
-//            @Override
-//            public String getRevision() {
-//                return null;
-//            }
-//        };
-        //LinearNNSearch knnHelper = new LinearNNSearch(trainSet);
-        //Instances nearestinstances = knnHelper.kNearestNeighbours(trainSet, k);
-        //knn_helper.kNearestNeighbours(trainSet, k);
-//        Classifier ibk = new IBk();
-//        Evaluation eval = new Evaluation(trainSet);
-//
-//        ibk.buildClassifier(data);
-        //double class1 = ibk.classifyInstance(trainSet);
+    public void processKNN(Instances data, int trainSize, int testSize, int k) throws Exception {
+
+        MLHelper helper = new MLHelper();
+        Instances trainSet = helper.setTrainData(data, trainSize, testSize);
+        Instances testSet = helper.setTestDate(data, trainSize, testSize);
+        long startTrainTime = System.currentTimeMillis();
+        Classifier ibk = new IBk(k);
+        long endTrainTime = 0, startTestTime = 0;
+        Evaluation eval = null;
+        try{
+            ibk.buildClassifier(trainSet);
+            endTrainTime = System.currentTimeMillis();
+            startTestTime = System.currentTimeMillis();
+            eval = new Evaluation(testSet);
+            eval.evaluateModel(ibk, testSet);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        long endTestTime = System.currentTimeMillis();
+        trainTime = startTrainTime - endTrainTime;
+        testTime = startTestTime - endTestTime;
+        falsePositiveRate = eval.falsePositiveRate(0);
+        falseNegativeRate = eval.falseNegativeRate(0);
+        hter = (falsePositiveRate + falseNegativeRate) / 2;
+        truePositiveRate = eval.truePositiveRate(0);
+        trueNegativeRate = eval.trueNegativeRate(0);
+        algoSummary = eval.toSummaryString();
+    }
+
+    public long getTrainTime() {
+        return trainTime;
+    }
+
+    public long getTestTime() {
+        return testTime;
+    }
+
+    public double getFalsePositiveRate() {
+        return falsePositiveRate;
+    }
+
+    public double getFalseNegativeRate() {
+        return falseNegativeRate;
+    }
+
+    public double getHter() {
+        return hter;
+    }
+
+    public double getTruePositiveRate() {
+        return truePositiveRate;
+    }
+
+    public double getTrueNegativeRate() {
+        return trueNegativeRate;
+    }
+
+    public String getAlgoSummary() {
+        return algoSummary;
     }
 }
