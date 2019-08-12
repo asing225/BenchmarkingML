@@ -7,11 +7,11 @@
         android:id="@+id/result"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="" />
 
     <TextView
         android:id="@+id/out"
         android:layout_width="match_parent"
         android:layout_height="710dp"
-        android:text="TextView" />
+        android:text="" />
 </LinearLayout>

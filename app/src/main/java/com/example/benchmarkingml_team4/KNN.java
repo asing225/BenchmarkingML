@@ -9,7 +9,7 @@ public class KNN {
 
     private long trainTime, testTime;
     private double falsePositiveRate, falseNegativeRate, hter, truePositiveRate, trueNegativeRate;
-    private String algoSummary;
+    public String algoSummary;
 
     public void processKNN(Instances data, int trainSize, int testSize, int k) throws Exception {
 
@@ -70,6 +70,7 @@ public class KNN {
     }
 
     public String getAlgoSummary() {
+        //eval.toSummaryString("\nResults:\nCurrent Timestamp: "+format+"\n tpRate: "+tpRate + "\nTNR: "+tnRate+ "\nFPR: "+ fpRate + "\nFNR: "+ fnRate + " \nHTER: "+ hter +"\nTotal time training: "+ (totalRunTime) + " milliseconds" + "\nTotal time testing: "+ (TestTime) + " milliseconds", false);
         return algoSummary;
     }
 }

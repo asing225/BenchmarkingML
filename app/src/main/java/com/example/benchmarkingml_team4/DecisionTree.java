@@ -1,5 +1,10 @@
 package com.example.benchmarkingml_team4;
 
+import android.util.Log;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.trees.REPTree;
@@ -15,6 +20,12 @@ public class DecisionTree {
     private long totalRunTime;
     private long TrainTime;
     private long TestTime;
+    public String print= "";
+    private String algoSummary;
+
+    //timestamp when algorithm ran
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy-hh-mm-ss");
+    String format = simpleDateFormat.format(new Date());
 
     // Calls the DecisionTree classifier and calculates the variables
     public void process(Instances context, int trainSize, int testSize) throws Exception {
@@ -35,7 +46,11 @@ public class DecisionTree {
         //Calculating total run time
         setTotalRunTime(getTrainTime() + getTestTime());
         System.out.println("Evaluate Breast Cancer Dataset using Decision Tree Algorithm using WEKA");
-        System.out.println(eval.toSummaryString());
+        algoSummary = eval.toSummaryString();
+        System.out.println(algoSummary);
+
+        //Log.d("Decision Tree", "Current Timestamp"+ format);
+        //print = eval.toSummaryString("\nResults:\nCurrent Timestamp: "+format+"\n tpRate: "+tpRate + "\nTNR: "+tnRate+ "\nFPR: "+ fpRate + "\nFNR: "+ fnRate + " \nHTER: "+ hter +"\nTotal time training: "+ (totalRunTime) + " milliseconds" + "\nTotal time testing: "+ (TestTime) + " milliseconds", false);
         System.out.println(classifier);
         setTpRate(eval.truePositiveRate(0));
         System.out.println("The True positive rate is " + getTpRate());
@@ -47,6 +62,7 @@ public class DecisionTree {
         System.out.println("The False negative rate is " + getFnRate());
         setHter((getFpRate() + getFnRate())/2);
         System.out.println("The HTE rate is " + getHter());
+       // return print;
     }
 
     public double getTpRate() {
@@ -113,4 +129,11 @@ public class DecisionTree {
     public void setTotalRunTime(long runTime) {
         this.totalRunTime = runTime;
     }
+
+    public String getAlgoSummary() {
+        //eval.toSummaryString("\nResults:\nCurrent Timestamp: "+format+"\n tpRate: "+tpRate + "\nTNR: "+tnRate+ "\nFPR: "+ fpRate + "\nFNR: "+ fnRate + " \nHTER: "+ hter +"\nTotal time training: "+ (totalRunTime) + " milliseconds" + "\nTotal time testing: "+ (TestTime) + " milliseconds", false);
+        return algoSummary;
+    }
+
+
 }

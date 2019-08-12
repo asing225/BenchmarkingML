@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     Button classify;
     int trainSize = 0, testSize = 0, splitRatio = 1, k = 2;
     String writedata = "";
+
     OutputStreamWriter outputStreamWriter = null;
 
     @Override
@@ -100,13 +101,13 @@ public class MainActivity extends AppCompatActivity {
                             knnAlgo.processKNN(instance, trainSize, testSize, k);
                             intent.putExtra("test", knnAlgo.getAlgoSummary());
                             writedata = writedata + knnAlgo.getAlgoSummary() + "\r\n";
-                            writedata = writedata + Double.toString(knnAlgo.getFalseNegativeRate()) + "\r\n";
-                            writedata = writedata + Double.toString(knnAlgo.getFalsePositiveRate()) + "\r\n";
-                            writedata = writedata + Double.toString(knnAlgo.getHter()) + "\r\n";
-                            writedata = writedata + Double.toString(knnAlgo.getTrueNegativeRate()) + "\r\n";
-                            writedata = writedata + Double.toString(knnAlgo.getTruePositiveRate()) + "\r\n";
-                            writedata = writedata + Long.toString(knnAlgo.getTrainTime()) + "\r\n";
-                            writedata = writedata + Long.toString(knnAlgo.getTestTime()) + "\r\n";
+                            writedata = writedata + Double.toString(knnAlgo.getFalseNegativeRate()) + "\n\r";
+                            writedata = writedata + Double.toString(knnAlgo.getFalsePositiveRate()) + "\n\r";
+                            writedata = writedata + Double.toString(knnAlgo.getHter()) + "\n\r";
+                            writedata = writedata + Double.toString(knnAlgo.getTrueNegativeRate()) + "\n\r";
+                            writedata = writedata + Double.toString(knnAlgo.getTruePositiveRate()) + "\n\r";
+                            writedata = writedata + Long.toString(knnAlgo.getTrainTime()) + "\n\r";
+                            writedata = writedata + Long.toString(knnAlgo.getTestTime()) + "\n\r";
                             writeToFile(writedata, MainActivity.this);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -118,16 +119,20 @@ public class MainActivity extends AppCompatActivity {
                         DecisionTree decisionTree = new DecisionTree();
                         //getting values from decision tree class
                         try {
+                            StringBuffer sb= new StringBuffer("\n");
+                            sb.append(System.getProperty("line.separator"));
                             writedata = new String();
                             decisionTree.process(instance, trainSize, testSize);
-                            writedata = writedata + Double.toString(decisionTree.getTpRate()) + "\r\n";
-                            writedata = writedata + Double.toString(decisionTree.getTnRate()) + "\r\n";
-                            writedata = writedata + Double.toString(decisionTree.getFnRate()) + "\r\n";
-                            writedata = writedata + Double.toString(decisionTree.getFpRate()) + "\r\n";
-                            writedata = writedata + Double.toString(decisionTree.getHter()) + "\r\n";
-                            writedata = writedata + Long.toString(decisionTree.getTrainTime()) + "\r\n";
-                            writedata = writedata + Long.toString(decisionTree.getTestTime()) + "\r\n";
-                            writedata = writedata + Long.toString(decisionTree.getTotalRunTime()) + "\r\n";
+                            intent.putExtra("result", decisionTree.getAlgoSummary());
+                            writedata = writedata + decisionTree.getAlgoSummary() + "\n";
+                            writedata = writedata + Double.toString(decisionTree.getTpRate())+ "\n" ;
+                            writedata = writedata + Double.toString(decisionTree.getTnRate()) + "\n";
+                            writedata = writedata + Double.toString(decisionTree.getFnRate()) + "\n";
+                            writedata = writedata + Double.toString(decisionTree.getFpRate()) + "\n";
+                            writedata = writedata + Double.toString(decisionTree.getHter()) + "\n";
+                            writedata = writedata + Long.toString(decisionTree.getTrainTime())+ "\n";
+                            writedata = writedata + Long.toString(decisionTree.getTestTime())+ "\n";
+                            writedata = writedata + Long.toString(decisionTree.getTotalRunTime()) + "\n";
                             writeToFile(writedata, MainActivity.this);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -139,6 +144,8 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             writedata = new String();
                             lr.process(instance,trainSize,testSize);
+                            intent.putExtra("result", lr.getAlgoSummary());
+                            writedata = writedata + lr.getAlgoSummary() + "\r\n";
                             writedata = writedata + Double.toString(lr.getTpr()) + "\r\n";
                             writedata = writedata + Double.toString(lr.getTnr()) + "\r\n";
                             writedata = writedata + Double.toString(lr.getFnr()) + "\r\n";
@@ -158,14 +165,17 @@ public class MainActivity extends AppCompatActivity {
                         try{
                             writedata = new String();
                             rf.process_RF(instance,trainSize,testSize);
-                            writedata = writedata + Double.toString(rf.getTruePositiveRate()) + "\r\n";
-                            writedata = writedata + Double.toString(rf.getTrueNegativeRate()) + "\r\n";
-                            writedata = writedata + Double.toString(rf.getFalseNegativeRate()) + "\r\n";
-                            writedata = writedata + Double.toString(rf.getFalsePositiveRate()) + "\r\n";
-                            writedata = writedata + Double.toString(rf.getHter()) + "\r\n";
-                            writedata = writedata + Long.toString(rf.getTrainTime()) + "\r\n";
-                            writedata = writedata + Long.toString(rf.getTestTime()) + "\r\n";
-                            writedata = writedata + Double.toString(rf.getExecution_Time()) + "\r\n";
+                            intent.putExtra("result", rf.getAlgoSummary());
+                            writedata = writedata + "\n" + rf.getAlgoSummary() + "\r\n " ;
+                            writedata = writedata + "\r" + Double.toString(rf.getTruePositiveRate()) + "\r\n";
+                            writedata = writedata + "\n" + Double.toString(rf.getTrueNegativeRate()) + "\r\n";
+                            writedata = writedata + "\t" + Double.toString(rf.getTrueNegativeRate()) + "\r\n";
+                            writedata = writedata + "\n" + Double.toString(rf.getFalseNegativeRate()) + "\r\n";
+                            writedata = writedata + "\n" + Double.toString(rf.getFalsePositiveRate()) + "\r\n";
+                            writedata = writedata + "\n" + Double.toString(rf.getHter()) + "\r\n";
+                            writedata = writedata + "\n" + Long.toString(rf.getTrainTime()) + "\r\n";
+                            writedata = writedata + "\n" + Long.toString(rf.getTestTime()) + "\r\n";
+                            writedata = writedata + "\n" + Double.toString(rf.getExecution_Time()) + "\r\n";
                             writeToFile(writedata, MainActivity.this);
                         }
                         catch (Exception e){

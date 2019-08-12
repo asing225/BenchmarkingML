@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+
 public class ResultPage extends AppCompatActivity {
 
 
@@ -34,14 +35,14 @@ public class ResultPage extends AppCompatActivity {
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             String receiveString = "";
             StringBuilder stringBuilder = new StringBuilder();
-
             while (true) {
                 try {
-                    if (!((receiveString = bufferedReader.readLine()) != null)) break;
+                    if (!((receiveString = bufferedReader.readLine()) != null))
+                        break;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                stringBuilder.append(receiveString);
+                stringBuilder.append(receiveString+"\n");
             }
 
             try {
