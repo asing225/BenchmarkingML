@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final Intent passData = new Intent();
+        //final Intent passData = new Intent(MainActivity.this, ResultPage.class);
         classify.setOnClickListener(new View.OnClickListener() {
             Context context = MainActivity.this;
             @Override
@@ -93,11 +93,23 @@ public class MainActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        passData.putExtra("trainTime", knnAlgo.getTrainTime());
+                        //passData.putExtra("trainTime", knnAlgo.getTrainTime());
                     }
                     if (dt.isChecked()) {
                         algorithmCount++;
-
+                        DecisionTree decisionTree = new DecisionTree();
+                        //getting values from decision tree class
+                        try {
+                            decisionTree.process(instance, trainSize, testSize);
+                            decisionTree.getTpRate();
+                            decisionTree.getTnRate();
+                            decisionTree.getFnRate();
+                            decisionTree.getFpRate();
+                            decisionTree.getHter();
+                            decisionTree.getTotalTime();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                     if (lr.isChecked()) {
                         algorithmCount++;
