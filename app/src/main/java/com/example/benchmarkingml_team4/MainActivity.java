@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -13,7 +15,11 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 import weka.core.Instances;
 
@@ -24,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     SeekBar seek;
     Button classify;
     int trainSize = 0, testSize = 0, splitRatio = 1, k = 2;
+    String writedata = "";
+    OutputStreamWriter outputStreamWriter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        final Intent intent = new Intent(MainActivity.this, ResultPage.class);
         classify.setOnClickListener(new View.OnClickListener() {
             Context context = MainActivity.this;
             @Override
@@ -87,9 +95,19 @@ public class MainActivity extends AppCompatActivity {
                     if (knn.isChecked()) {
                         k = Integer.parseInt(kvalue.getText().toString());
                         algorithmCount++;
-                        KNN knn = new KNN();
+                        KNN knnAlgo = new KNN();
                         try {
-                            knn.processKNN(instance, trainSize, testSize, k);
+                            knnAlgo.processKNN(instance, trainSize, testSize, k);
+                            intent.putExtra("test", knnAlgo.getAlgoSummary());
+                            writedata = writedata + knnAlgo.getAlgoSummary() + "\r\n";
+                            writedata = writedata + Double.toString(knnAlgo.getFalseNegativeRate()) + "\r\n";
+                            writedata = writedata + Double.toString(knnAlgo.getFalsePositiveRate()) + "\r\n";
+                            writedata = writedata + Double.toString(knnAlgo.getHter()) + "\r\n";
+                            writedata = writedata + Double.toString(knnAlgo.getTrueNegativeRate()) + "\r\n";
+                            writedata = writedata + Double.toString(knnAlgo.getTruePositiveRate()) + "\r\n";
+                            writedata = writedata + Long.toString(knnAlgo.getTrainTime()) + "\r\n";
+                            writedata = writedata + Long.toString(knnAlgo.getTestTime()) + "\r\n";
+                            writeToFile(writedata, MainActivity.this);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -100,37 +118,55 @@ public class MainActivity extends AppCompatActivity {
                         DecisionTree decisionTree = new DecisionTree();
                         //getting values from decision tree class
                         try {
+                            writedata = new String();
                             decisionTree.process(instance, trainSize, testSize);
-                            decisionTree.getTpRate();
-                            decisionTree.getTnRate();
-                            decisionTree.getFnRate();
-                            decisionTree.getFpRate();
-                            decisionTree.getHter();
-                            decisionTree.getTrainTime();
-                            decisionTree.getTestTime();
-                            decisionTree.getTotalRunTime();
-
+                            writedata = writedata + Double.toString(decisionTree.getTpRate()) + "\r\n";
+                            writedata = writedata + Double.toString(decisionTree.getTnRate()) + "\r\n";
+                            writedata = writedata + Double.toString(decisionTree.getFnRate()) + "\r\n";
+                            writedata = writedata + Double.toString(decisionTree.getFpRate()) + "\r\n";
+                            writedata = writedata + Double.toString(decisionTree.getHter()) + "\r\n";
+                            writedata = writedata + Long.toString(decisionTree.getTrainTime()) + "\r\n";
+                            writedata = writedata + Long.toString(decisionTree.getTestTime()) + "\r\n";
+                            writedata = writedata + Long.toString(decisionTree.getTotalRunTime()) + "\r\n";
+                            writeToFile(writedata, MainActivity.this);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
                     if (lr.isChecked()) {
                         algorithmCount++;
+                        LogisticRegression lr= new LogisticRegression();
+                        try {
+                            writedata = new String();
+                            lr.process(instance,trainSize,testSize);
+                            writedata = writedata + Double.toString(lr.getTpr()) + "\r\n";
+                            writedata = writedata + Double.toString(lr.getTnr()) + "\r\n";
+                            writedata = writedata + Double.toString(lr.getFnr()) + "\r\n";
+                            writedata = writedata + Double.toString(lr.getFpr()) + "\r\n";
+                            writedata = writedata + Double.toString(lr.getHter()) + "\r\n";
+                            writedata = writedata + Long.toString(lr.getTrainTime()) + "\r\n";
+                            writedata = writedata + Long.toString(lr.getTestTime()) + "\r\n";
+                            writedata = writedata + Long.toString(lr.getExecutionTime()) + "\r\n";
+                            writeToFile(writedata, MainActivity.this);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                     if (rf.isChecked()) {
                         algorithmCount++;
                         Randomforest rf = new Randomforest();
                         try{
-                                rf.process_RF(instance,trainSize,testSize);
-                                rf.getTruePositiveRate();
-                                rf.getTrueNegativeRate();
-                                rf.getFalseNegativeRate();
-                                rf.getFalsePositiveRate();
-                                rf.getTrainTime();
-                                rf.getTestTime();
-                                rf.getHter();
-                                rf.getExecution_Time();
-
+                            writedata = new String();
+                            rf.process_RF(instance,trainSize,testSize);
+                            writedata = writedata + Double.toString(rf.getTruePositiveRate()) + "\r\n";
+                            writedata = writedata + Double.toString(rf.getTrueNegativeRate()) + "\r\n";
+                            writedata = writedata + Double.toString(rf.getFalseNegativeRate()) + "\r\n";
+                            writedata = writedata + Double.toString(rf.getFalsePositiveRate()) + "\r\n";
+                            writedata = writedata + Double.toString(rf.getHter()) + "\r\n";
+                            writedata = writedata + Long.toString(rf.getTrainTime()) + "\r\n";
+                            writedata = writedata + Long.toString(rf.getTestTime()) + "\r\n";
+                            writedata = writedata + Double.toString(rf.getExecution_Time()) + "\r\n";
+                            writeToFile(writedata, MainActivity.this);
                         }
                         catch (Exception e){
                             e.printStackTrace();
@@ -147,6 +183,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
+    private void writeToFile(String data, Context context) {
+        try {
+            outputStreamWriter = new OutputStreamWriter(context.openFileOutput("logfile.txt", Context.MODE_PRIVATE));
+            outputStreamWriter.write(data);
+            outputStreamWriter.close();
+        }
+        catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
     }
 }
