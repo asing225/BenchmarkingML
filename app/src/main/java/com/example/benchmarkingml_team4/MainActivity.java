@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         classify.setOnClickListener(new View.OnClickListener() {
             Context context = MainActivity.this;
             @Override
@@ -92,10 +93,26 @@ public class MainActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+
                     }
                     if (dt.isChecked()) {
                         algorithmCount++;
+                        DecisionTree decisionTree = new DecisionTree();
+                        //getting values from decision tree class
+                        try {
+                            decisionTree.process(instance, trainSize, testSize);
+                            decisionTree.getTpRate();
+                            decisionTree.getTnRate();
+                            decisionTree.getFnRate();
+                            decisionTree.getFpRate();
+                            decisionTree.getHter();
+                            decisionTree.getTrainTime();
+                            decisionTree.getTestTime();
+                            decisionTree.getTotalRunTime();
 
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                     if (lr.isChecked()) {
                         algorithmCount++;
