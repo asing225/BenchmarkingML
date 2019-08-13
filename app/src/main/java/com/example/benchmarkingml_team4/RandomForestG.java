@@ -9,17 +9,11 @@ import weka.classifiers.Evaluation;
 import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
 //Using GPU functionality
-public class Randomforest extends AppCompatActivity {
+public class RandomForestG {
 
     private long Train_Time, Test_Time;
     private double False_Positive_Rate, False_Negative_Rate, hter, True_Positive_Rate, True_Negative_Rate,Execution_Time;
     private String algoSummary;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.result_page);
-
-    }
 
     public void process_RF(Instances data, int trainSize, int testSize) throws Exception {
 
