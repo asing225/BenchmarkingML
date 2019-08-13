@@ -21,7 +21,7 @@ public class DecisionTree {
     private long TrainTime;
     private long TestTime;
     public String print= "";
-    private String algoSummary;
+    public String algoSummary;
 
     //timestamp when algorithm ran
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy-hh-mm-ss");
@@ -46,10 +46,10 @@ public class DecisionTree {
         //Calculating total run time
         setTotalRunTime(getTrainTime() + getTestTime());
         System.out.println("Evaluate Breast Cancer Dataset using Decision Tree Algorithm using WEKA");
-        algoSummary = eval.toSummaryString();
-        System.out.println(algoSummary);
+        System.out.println(eval.toSummaryString());
 
         //Log.d("Decision Tree", "Current Timestamp"+ format);
+        algoSummary = eval.toSummaryString();
         //print = eval.toSummaryString("\nResults:\nCurrent Timestamp: "+format+"\n tpRate: "+tpRate + "\nTNR: "+tnRate+ "\nFPR: "+ fpRate + "\nFNR: "+ fnRate + " \nHTER: "+ hter +"\nTotal time training: "+ (totalRunTime) + " milliseconds" + "\nTotal time testing: "+ (TestTime) + " milliseconds", false);
         System.out.println(classifier);
         setTpRate(eval.truePositiveRate(0));
@@ -129,11 +129,9 @@ public class DecisionTree {
     public void setTotalRunTime(long runTime) {
         this.totalRunTime = runTime;
     }
-
     public String getAlgoSummary() {
         //eval.toSummaryString("\nResults:\nCurrent Timestamp: "+format+"\n tpRate: "+tpRate + "\nTNR: "+tnRate+ "\nFPR: "+ fpRate + "\nFNR: "+ fnRate + " \nHTER: "+ hter +"\nTotal time training: "+ (totalRunTime) + " milliseconds" + "\nTotal time testing: "+ (TestTime) + " milliseconds", false);
         return algoSummary;
     }
-
 
 }

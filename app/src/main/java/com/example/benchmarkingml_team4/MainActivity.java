@@ -100,14 +100,15 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             knnAlgo.processKNN(instance, trainSize, testSize, k);
                             intent.putExtra("test", knnAlgo.getAlgoSummary());
-                            writedata = writedata + knnAlgo.getAlgoSummary() + "\r\n";
-                            writedata = writedata + Double.toString(knnAlgo.getFalseNegativeRate()) + "\n\r";
-                            writedata = writedata + Double.toString(knnAlgo.getFalsePositiveRate()) + "\n\r";
-                            writedata = writedata + Double.toString(knnAlgo.getHter()) + "\n\r";
-                            writedata = writedata + Double.toString(knnAlgo.getTrueNegativeRate()) + "\n\r";
-                            writedata = writedata + Double.toString(knnAlgo.getTruePositiveRate()) + "\n\r";
-                            writedata = writedata + Long.toString(knnAlgo.getTrainTime()) + "\n\r";
-                            writedata = writedata + Long.toString(knnAlgo.getTestTime()) + "\n\r";
+                            writedata = writedata + " KNN Algorithm" + knnAlgo.getAlgoSummary();
+                            writedata = writedata + "\n True Positive Rate: \t" + knnAlgo.getTruePositiveRate();
+                            writedata = writedata + "\n True Negative Rate: \t" + knnAlgo.getTrueNegativeRate();
+                            writedata = writedata + "\n False Negative Rate: \t" + knnAlgo.getFalseNegativeRate();
+                            writedata = writedata + "\n False Positive Rate: \t" + knnAlgo.getFalsePositiveRate();
+                            writedata = writedata + "\n Hter: \t" + knnAlgo.getHter();
+                            writedata = writedata + "\n Train Time: \t" + knnAlgo.getTrainTime();
+                            writedata = writedata + "\n Test Time: \t" + knnAlgo.getTestTime();
+                            writedata = writedata + "\n Total Execution Time: \t" + knnAlgo.getExecutionTime();
                             writeToFile(writedata, MainActivity.this);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -124,15 +125,15 @@ public class MainActivity extends AppCompatActivity {
                             writedata = new String();
                             decisionTree.process(instance, trainSize, testSize);
                             intent.putExtra("result", decisionTree.getAlgoSummary());
-                            writedata = writedata + decisionTree.getAlgoSummary() + "\n";
-                            writedata = writedata + Double.toString(decisionTree.getTpRate())+ "\n" ;
-                            writedata = writedata + Double.toString(decisionTree.getTnRate()) + "\n";
-                            writedata = writedata + Double.toString(decisionTree.getFnRate()) + "\n";
-                            writedata = writedata + Double.toString(decisionTree.getFpRate()) + "\n";
-                            writedata = writedata + Double.toString(decisionTree.getHter()) + "\n";
-                            writedata = writedata + Long.toString(decisionTree.getTrainTime())+ "\n";
-                            writedata = writedata + Long.toString(decisionTree.getTestTime())+ "\n";
-                            writedata = writedata + Long.toString(decisionTree.getTotalRunTime()) + "\n";
+                            writedata = writedata + " Decision Tree \n" + decisionTree.getAlgoSummary() + "\n";
+                            writedata = writedata + "\n True Positive Rate: \t" + decisionTree.getTpRate();
+                            writedata = writedata + "\n True Negative Rate: \t" + decisionTree.getTnRate();
+                            writedata = writedata + "\n False Negative Rate: \t" + decisionTree.getFnRate();
+                            writedata = writedata + "\n False Positive Rate: \t" + decisionTree.getFpRate();
+                            writedata = writedata + "\n Hter: \t" + decisionTree.getHter();
+                            writedata = writedata + "\n Train Time: \t" + decisionTree.getTrainTime();
+                            writedata = writedata + "\n Test Time: \t" + decisionTree.getTestTime();
+                            writedata = writedata + "\n Total Execution Time: \t" + decisionTree.getTotalRunTime();
                             writeToFile(writedata, MainActivity.this);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -145,15 +146,15 @@ public class MainActivity extends AppCompatActivity {
                             writedata = new String();
                             lr.process(instance,trainSize,testSize);
                             intent.putExtra("result", lr.getAlgoSummary());
-                            writedata = writedata + lr.getAlgoSummary() + "\r\n";
-                            writedata = writedata + Double.toString(lr.getTpr()) + "\r\n";
-                            writedata = writedata + Double.toString(lr.getTnr()) + "\r\n";
-                            writedata = writedata + Double.toString(lr.getFnr()) + "\r\n";
-                            writedata = writedata + Double.toString(lr.getFpr()) + "\r\n";
-                            writedata = writedata + Double.toString(lr.getHter()) + "\r\n";
-                            writedata = writedata + Long.toString(lr.getTrainTime()) + "\r\n";
-                            writedata = writedata + Long.toString(lr.getTestTime()) + "\r\n";
-                            writedata = writedata + Long.toString(lr.getExecutionTime()) + "\r\n";
+                            writedata = writedata + "Logistic Regression \n" +lr.getAlgoSummary();
+                            writedata = writedata + "\n True Positive Rate: \t" + lr.getTpr();
+                            writedata = writedata + "\n True Negative Rate: \t" + lr.getTnr();
+                            writedata = writedata + "\n False Negative Rate: \t" + lr.getFnr();
+                            writedata = writedata + "\n False Positive Rate: \t" + lr.getFpr();
+                            writedata = writedata + "\n Hter: \t" + lr.getHter();
+                            writedata = writedata + "\n Train Time: \t" + lr.getTrainTime();
+                            writedata = writedata + "\n Test Time: \t" + lr.getTestTime();
+                            writedata = writedata + "\n Total Execution Time: \t" + lr.getExecutionTime();
                             writeToFile(writedata, MainActivity.this);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -166,16 +167,15 @@ public class MainActivity extends AppCompatActivity {
                             writedata = new String();
                             rf.process_RF(instance,trainSize,testSize);
                             intent.putExtra("result", rf.getAlgoSummary());
-                            writedata = writedata + "\n" + rf.getAlgoSummary() + "\r\n " ;
-                            writedata = writedata + "\r" + Double.toString(rf.getTruePositiveRate()) + "\r\n";
-                            writedata = writedata + "\n" + Double.toString(rf.getTrueNegativeRate()) + "\r\n";
-                            writedata = writedata + "\t" + Double.toString(rf.getTrueNegativeRate()) + "\r\n";
-                            writedata = writedata + "\n" + Double.toString(rf.getFalseNegativeRate()) + "\r\n";
-                            writedata = writedata + "\n" + Double.toString(rf.getFalsePositiveRate()) + "\r\n";
-                            writedata = writedata + "\n" + Double.toString(rf.getHter()) + "\r\n";
-                            writedata = writedata + "\n" + Long.toString(rf.getTrainTime()) + "\r\n";
-                            writedata = writedata + "\n" + Long.toString(rf.getTestTime()) + "\r\n";
-                            writedata = writedata + "\n" + Double.toString(rf.getExecution_Time()) + "\r\n";
+                            writedata = writedata + "Random Forest \n" + rf.getAlgoSummary() + "\r\n " ;
+                            writedata = writedata + "\n True Positive Rate: \t" + rf.getTruePositiveRate();
+                            writedata = writedata + "\n True Negative Rate: \t" + rf.getTrueNegativeRate();
+                            writedata = writedata + "\n False Negative Rate: \t" + rf.getFalseNegativeRate();
+                            writedata = writedata + "\n False Positive Rate: \t" + rf.getFalsePositiveRate();
+                            writedata = writedata + "\n Hter: \t" + rf.getHter();
+                            writedata = writedata + "\n Train Time: \t" + rf.getTrainTime();
+                            writedata = writedata + "\n Test Time: \t" + rf.getTestTime();
+                            writedata = writedata + "\n Total Execution Time: \t" + rf.getExecution_Time();
                             writeToFile(writedata, MainActivity.this);
                         }
                         catch (Exception e){
