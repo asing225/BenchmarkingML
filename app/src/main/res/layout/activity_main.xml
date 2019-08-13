@@ -92,31 +92,59 @@
 
     <Button
         android:id="@+id/classify"
-        android:layout_width="199dp"
-        android:layout_height="39dp"
+        android:layout_width="143dp"
+        android:layout_height="51dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="44dp"
         android:text="Train"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/Cloud_btn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.885"
+        app:layout_constraintStart_toEndOf="@+id/gpuButton"
+        app:layout_constraintTop_toBottomOf="@+id/lr"
+        app:layout_constraintVertical_bias="0.556" />
 
 
     <Button
         android:id="@+id/gpuButton"
-        android:layout_width="199dp"
-        android:layout_height="41dp"
+        android:layout_width="147dp"
+        android:layout_height="55dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="44dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="48dp"
         android:text="Run Algo On GPU"
-        app:layout_constraintBottom_toTopOf="@+id/classify"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.145"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lr"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/lr" />
+
+    <Button
+        android:id="@+id/Upload_btn"
+        android:layout_width="147dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/upload_data"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/Cloud_btn"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gpuButton"
+        app:layout_constraintVertical_bias="0.491" />
+
+    <Button
+        android:id="@+id/Cloud_btn"
+        android:layout_width="146dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="28dp"
+        android:text="View on Cloud"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
