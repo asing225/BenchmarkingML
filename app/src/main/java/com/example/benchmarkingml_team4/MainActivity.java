@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
     EditText kvalue;
     SeekBar seek;
     Button classify, Upload, View_Cloud;
-    Button classify;
     Button GPU;
   
     int trainSize = 0, testSize = 0, splitRatio = 1, k = 2;
@@ -288,6 +287,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 int algorithmCount = 0;
                 Toast.makeText(MainActivity.this, "Please wait for results.", Toast.LENGTH_SHORT).show();
+                startActivity(intent);
                 if (rf.isChecked()) {
                     algorithmCount++;
                     Randomforest rf = new Randomforest();
