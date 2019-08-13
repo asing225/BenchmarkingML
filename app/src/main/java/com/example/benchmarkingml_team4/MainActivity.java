@@ -2,9 +2,13 @@ package com.example.benchmarkingml_team4;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +25,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
+import Service.UploadToServer;
 import weka.core.Instances;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,8 +33,10 @@ public class MainActivity extends AppCompatActivity {
     CheckBox knn, dt, lr, rf;
     EditText kvalue;
     SeekBar seek;
+    Button classify, Upload, View_Cloud;
     Button classify;
     Button GPU;
+  
     int trainSize = 0, testSize = 0, splitRatio = 1, k = 2;
     String writedata = "";
 
@@ -47,7 +54,11 @@ public class MainActivity extends AppCompatActivity {
         kvalue = (EditText) findViewById(R.id.k_value);
 
         classify = (Button) findViewById(R.id.classify);
+        Upload = (Button) findViewById(R.id.Upload_btn);
+        View_Cloud = (Button) findViewById(R.id. Cloud_btn);
+
         GPU= (Button)findViewById(R.id.gpuButton);
+
         seek = (SeekBar) findViewById(R.id.seekBar);
         seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int newVal = 0;
@@ -75,7 +86,69 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        Upload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "Upload Successful", Toast.LENGTH_SHORT).show();
+                if (knn.isChecked() || dt.isChecked() || lr.isChecked() || rf.isChecked()) {
+                    new Thread(new Runnable() {
+                        public void run() {
+                            runOnUiThread(new Runnable() {
+                                public void run() {
+                                    Log.i("msg","upload started");
+                                }
+                            });
+
+                            int result = -1;
+
+                            if (result == 1) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Log.i("msg","upload complete");
+                                    }
+                                });
+                            } else if (result == 0) {
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Log.e("msg","upload error");
+                                    }
+                                });
+                            }
+                        }
+                    }).start();
+
+                }
+
+                else{
+                    Toast.makeText(MainActivity.this, "Please select an algorithm", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+
+        });
+
+        View_Cloud.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (knn.isChecked() || dt.isChecked() || lr.isChecked() || rf.isChecked()) {
+                    Uri uri = Uri.parse("https://colab.research.google.com/drive/1qtuJqSkMrF7TzO28FjoJ0UvnnuXpJ-Ls");
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(intent);
+                }
+
+                else{
+                    Toast.makeText(MainActivity.this, "Please select an algorithm", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
         Intent intent = new Intent(MainActivity.this, ResultPage.class);
+
         classify.setOnClickListener(new View.OnClickListener() {
             Context context = MainActivity.this;
             @Override
