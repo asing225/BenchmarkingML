@@ -19,6 +19,7 @@ public class LogisticRegression extends AppCompatActivity {
     private long TrainTime;
     private long TestTime;
     private long ExecutionTime;
+    private String algoSummary;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +55,7 @@ public class LogisticRegression extends AppCompatActivity {
         System.out.println(eval.toSummaryString());
         System.out.println(classifier);
 
+        algoSummary = eval.toSummaryString();
         //finding various parameters
          setTpr(eval.truePositiveRate(0));
         System.out.println("The True positive rate is " + getTpr());
@@ -133,5 +135,10 @@ public class LogisticRegression extends AppCompatActivity {
 
     public void setExecutionTime(long executionTime) {
         ExecutionTime = executionTime;
+    }
+
+    public String getAlgoSummary() {
+        //eval.toSummaryString("\nResults:\nCurrent Timestamp: "+format+"\n tpRate: "+tpRate + "\nTNR: "+tnRate+ "\nFPR: "+ fpRate + "\nFNR: "+ fnRate + " \nHTER: "+ hter +"\nTotal time training: "+ (totalRunTime) + " milliseconds" + "\nTotal time testing: "+ (TestTime) + " milliseconds", false);
+        return algoSummary;
     }
 }

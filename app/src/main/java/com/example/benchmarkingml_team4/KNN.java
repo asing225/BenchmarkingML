@@ -7,9 +7,9 @@ import weka.core.Instances;
 
 public class KNN {
 
-    private long trainTime, testTime;
+    private long trainTime, testTime,executionTime;
     private double falsePositiveRate, falseNegativeRate, hter, truePositiveRate, trueNegativeRate;
-    private String algoSummary;
+    public String algoSummary;
 
     public void processKNN(Instances data, int trainSize, int testSize, int k) throws Exception {
 
@@ -31,8 +31,9 @@ public class KNN {
             e.printStackTrace();
         }
         long endTestTime = System.currentTimeMillis();
-        trainTime = startTrainTime - endTrainTime;
-        testTime = startTestTime - endTestTime;
+        trainTime = -(startTrainTime - endTrainTime);
+        testTime = -(startTestTime - endTestTime);
+        setExecutionTime(getTrainTime() + getTestTime());
         falsePositiveRate = eval.falsePositiveRate(0);
         falseNegativeRate = eval.falseNegativeRate(0);
         hter = (falsePositiveRate + falseNegativeRate) / 2;
@@ -69,7 +70,18 @@ public class KNN {
         return trueNegativeRate;
     }
 
+    public void setExecutionTime(long ExecutionTime) {
+        executionTime = ExecutionTime;
+    }
+
+    public double getExecutionTime()
+    {
+        return executionTime;
+    }
+
+
     public String getAlgoSummary() {
+        //eval.toSummaryString("\nResults:\nCurrent Timestamp: "+format+"\n tpRate: "+tpRate + "\nTNR: "+tnRate+ "\nFPR: "+ fpRate + "\nFNR: "+ fnRate + " \nHTER: "+ hter +"\nTotal time training: "+ (totalRunTime) + " milliseconds" + "\nTotal time testing: "+ (TestTime) + " milliseconds", false);
         return algoSummary;
     }
 }

@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,7 +20,10 @@ import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 import Service.UploadToServer;
 import weka.core.Instances;
@@ -30,7 +34,13 @@ public class MainActivity extends AppCompatActivity {
     EditText kvalue;
     SeekBar seek;
     Button classify, Upload, View_Cloud;
+    Button classify;
+    Button GPU;
+  
     int trainSize = 0, testSize = 0, splitRatio = 1, k = 2;
+    String writedata = "";
+
+    OutputStreamWriter outputStreamWriter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
         classify = (Button) findViewById(R.id.classify);
         Upload = (Button) findViewById(R.id.Upload_btn);
         View_Cloud = (Button) findViewById(R.id. Cloud_btn);
+
+        GPU= (Button)findViewById(R.id.gpuButton);
 
         seek = (SeekBar) findViewById(R.id.seekBar);
         seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -73,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
 
         Upload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,6 +146,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        Intent intent = new Intent(MainActivity.this, ResultPage.class);
+
         classify.setOnClickListener(new View.OnClickListener() {
             Context context = MainActivity.this;
             @Override
@@ -155,9 +171,20 @@ public class MainActivity extends AppCompatActivity {
                     if (knn.isChecked()) {
                         k = Integer.parseInt(kvalue.getText().toString());
                         algorithmCount++;
-                        KNN knn = new KNN();
+                        KNN knnAlgo = new KNN();
                         try {
-                            knn.processKNN(instance, trainSize, testSize, k);
+                            knnAlgo.processKNN(instance, trainSize, testSize, k);
+                            intent.putExtra("test", knnAlgo.getAlgoSummary());
+                            writedata = writedata + " KNN Algorithm" + knnAlgo.getAlgoSummary();
+                            writedata = writedata + "\n True Positive Rate: \t" + knnAlgo.getTruePositiveRate();
+                            writedata = writedata + "\n True Negative Rate: \t" + knnAlgo.getTrueNegativeRate();
+                            writedata = writedata + "\n False Negative Rate: \t" + knnAlgo.getFalseNegativeRate();
+                            writedata = writedata + "\n False Positive Rate: \t" + knnAlgo.getFalsePositiveRate();
+                            writedata = writedata + "\n Hter: \t" + knnAlgo.getHter();
+                            writedata = writedata + "\n Train Time: \t" + knnAlgo.getTrainTime();
+                            writedata = writedata + "\n Test Time: \t" + knnAlgo.getTestTime();
+                            writedata = writedata + "\n Total Execution Time: \t" + knnAlgo.getExecutionTime();
+                            writeToFile(writedata, MainActivity.this);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -168,37 +195,63 @@ public class MainActivity extends AppCompatActivity {
                         DecisionTree decisionTree = new DecisionTree();
                         //getting values from decision tree class
                         try {
+                            StringBuffer sb= new StringBuffer("\n");
+                            sb.append(System.getProperty("line.separator"));
+                            writedata = new String();
                             decisionTree.process(instance, trainSize, testSize);
-                            decisionTree.getTpRate();
-                            decisionTree.getTnRate();
-                            decisionTree.getFnRate();
-                            decisionTree.getFpRate();
-                            decisionTree.getHter();
-                            decisionTree.getTrainTime();
-                            decisionTree.getTestTime();
-                            decisionTree.getTotalRunTime();
-
+                            intent.putExtra("result", decisionTree.getAlgoSummary());
+                            writedata = writedata + " Decision Tree \n" + decisionTree.getAlgoSummary() + "\n";
+                            writedata = writedata + "\n True Positive Rate: \t" + decisionTree.getTpRate();
+                            writedata = writedata + "\n True Negative Rate: \t" + decisionTree.getTnRate();
+                            writedata = writedata + "\n False Negative Rate: \t" + decisionTree.getFnRate();
+                            writedata = writedata + "\n False Positive Rate: \t" + decisionTree.getFpRate();
+                            writedata = writedata + "\n Hter: \t" + decisionTree.getHter();
+                            writedata = writedata + "\n Train Time: \t" + decisionTree.getTrainTime();
+                            writedata = writedata + "\n Test Time: \t" + decisionTree.getTestTime();
+                            writedata = writedata + "\n Total Execution Time: \t" + decisionTree.getTotalRunTime();
+                            writeToFile(writedata, MainActivity.this);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
                     if (lr.isChecked()) {
                         algorithmCount++;
+                        LogisticRegression lr= new LogisticRegression();
+                        try {
+                            writedata = new String();
+                            lr.process(instance,trainSize,testSize);
+                            intent.putExtra("result", lr.getAlgoSummary());
+                            writedata = writedata + "Logistic Regression \n" +lr.getAlgoSummary();
+                            writedata = writedata + "\n True Positive Rate: \t" + lr.getTpr();
+                            writedata = writedata + "\n True Negative Rate: \t" + lr.getTnr();
+                            writedata = writedata + "\n False Negative Rate: \t" + lr.getFnr();
+                            writedata = writedata + "\n False Positive Rate: \t" + lr.getFpr();
+                            writedata = writedata + "\n Hter: \t" + lr.getHter();
+                            writedata = writedata + "\n Train Time: \t" + lr.getTrainTime();
+                            writedata = writedata + "\n Test Time: \t" + lr.getTestTime();
+                            writedata = writedata + "\n Total Execution Time: \t" + lr.getExecutionTime();
+                            writeToFile(writedata, MainActivity.this);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                     if (rf.isChecked()) {
                         algorithmCount++;
                         Randomforest rf = new Randomforest();
                         try{
-                                rf.process_RF(instance,trainSize,testSize);
-                                rf.getTruePositiveRate();
-                                rf.getTrueNegativeRate();
-                                rf.getFalseNegativeRate();
-                                rf.getFalsePositiveRate();
-                                rf.getTrainTime();
-                                rf.getTestTime();
-                                rf.getHter();
-                                rf.getExecution_Time();
-
+                            writedata = new String();
+                            rf.process_RF(instance,trainSize,testSize);
+                            intent.putExtra("result", rf.getAlgoSummary());
+                            writedata = writedata + "Random Forest \n" + rf.getAlgoSummary() + "\r\n " ;
+                            writedata = writedata + "\n True Positive Rate: \t" + rf.getTruePositiveRate();
+                            writedata = writedata + "\n True Negative Rate: \t" + rf.getTrueNegativeRate();
+                            writedata = writedata + "\n False Negative Rate: \t" + rf.getFalseNegativeRate();
+                            writedata = writedata + "\n False Positive Rate: \t" + rf.getFalsePositiveRate();
+                            writedata = writedata + "\n Hter: \t" + rf.getHter();
+                            writedata = writedata + "\n Train Time: \t" + rf.getTrainTime();
+                            writedata = writedata + "\n Test Time: \t" + rf.getTestTime();
+                            writedata = writedata + "\n Total Execution Time: \t" + rf.getExecution_Time();
+                            writeToFile(writedata, MainActivity.this);
                         }
                         catch (Exception e){
                             e.printStackTrace();
@@ -216,5 +269,64 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-    }
-}
+    GPU.setOnClickListener(new View.OnClickListener() {
+        Context context = MainActivity.this;
+        @Override
+        public void onClick(View v) {
+
+            if (splitRatio == 0 || splitRatio == 100) {
+                Toast.makeText(MainActivity.this, "Please choose value between 1 and 100", Toast.LENGTH_LONG).show();
+            }
+            else {
+                ReadDataSet data = new ReadDataSet();
+                BufferedReader reader = data.readDataFile(context, R.raw.breastcancer);
+                Instances instance = null;
+                try {
+                    instance = new Instances(reader);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                int algorithmCount = 0;
+                Toast.makeText(MainActivity.this, "Please wait for results.", Toast.LENGTH_SHORT).show();
+                if (rf.isChecked()) {
+                    algorithmCount++;
+                    Randomforest rf = new Randomforest();
+                    try{
+                        writedata = new String();
+                        rf.process_RF(instance,trainSize,testSize);
+                        intent.putExtra("result", rf.getAlgoSummary());
+                        writedata = writedata + "Random Forest \n" + rf.getAlgoSummary() + "\r\n " ;
+                        writedata = writedata + "\n True Positive Rate: \t" + rf.getTruePositiveRate();
+                        writedata = writedata + "\n True Negative Rate: \t" + rf.getTrueNegativeRate();
+                        writedata = writedata + "\n False Negative Rate: \t" + rf.getFalseNegativeRate();
+                        writedata = writedata + "\n False Positive Rate: \t" + rf.getFalsePositiveRate();
+                        writedata = writedata + "\n Hter: \t" + rf.getHter();
+                        writedata = writedata + "\n Train Time: \t" + rf.getTrainTime();
+                        writedata = writedata + "\n Test Time: \t" + rf.getTestTime();
+                        writedata = writedata + "\n Total Execution Time: \t" + rf.getExecution_Time();
+                        writeToFile(writedata, MainActivity.this);
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    if (algorithmCount == 0) {
+                        Toast.makeText(MainActivity.this, "Please select an algorithm.", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Intent intent = new Intent(MainActivity.this, ResultPage.class);
+                        startActivity(intent);
+                    }
+
+                }
+                }}});
+            }
+                private void writeToFile (String data, Context context){
+                    try {
+                        outputStreamWriter = new OutputStreamWriter(context.openFileOutput("logfile.txt", Context.MODE_PRIVATE));
+                        outputStreamWriter.write(data);
+                        outputStreamWriter.close();
+                    } catch (IOException e) {
+                        Log.e("Exception", "File write failed: " + e.toString());
+                    }
+                }
+            }
