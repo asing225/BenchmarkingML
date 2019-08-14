@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.1"
+    buildToolsVersion "28.0.3"
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
     defaultConfig {
         applicationId "com.example.benchmarkingml_team4"
-        minSdkVersion 21
+        minSdkVersion 14 //lower than 14 doesn't support multidex
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"

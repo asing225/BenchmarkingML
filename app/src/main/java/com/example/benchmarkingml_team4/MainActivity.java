@@ -13,7 +13,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
+import android.widget.RadioButton;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Toast;
@@ -30,26 +30,31 @@ import weka.core.Instances;
 
 public class MainActivity extends AppCompatActivity {
 
-    CheckBox knn, dt, lr, rf;
+    RadioButton knn, dt, lr, rf;
     EditText kvalue;
     SeekBar seek;
     Button classify, Upload, View_Cloud;
     Button GPU;
-  
     int trainSize = 0, testSize = 0, splitRatio = 1, k = 2;
     String writedata = "";
 
     OutputStreamWriter outputStreamWriter = null;
 
+    public void clearRadioChecked(){
+        knn.setChecked(false);
+        dt.setChecked(false);
+        rf.setChecked(false);
+        lr.setChecked(false);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        knn = (CheckBox) findViewById(R.id.knn);
-        dt = (CheckBox) findViewById(R.id.dt);
-        lr = (CheckBox) findViewById(R.id.lr);
-        rf = (CheckBox) findViewById(R.id.rf);
+        knn = (RadioButton) findViewById(R.id.knn);
+        dt = (RadioButton) findViewById(R.id.dt);
+        lr = (RadioButton) findViewById(R.id.lr);
+        rf = (RadioButton) findViewById(R.id.rf);
         kvalue = (EditText) findViewById(R.id.k_value);
 
         classify = (Button) findViewById(R.id.classify);
@@ -168,10 +173,18 @@ public class MainActivity extends AppCompatActivity {
                     int algorithmCount = 0;
                     Toast.makeText(MainActivity.this, "Please wait for results.", Toast.LENGTH_SHORT).show();
                     if (knn.isChecked()) {
-                        k = Integer.parseInt(kvalue.getText().toString());
+                        clearRadioChecked();
+                        knn.setChecked(true);
+                        if(kvalue.getText().toString().equals("")){
+                            k = 3;
+                        }
+                        else{
+                            k = Integer.parseInt(kvalue.getText().toString());
+                        }
                         algorithmCount++;
                         KNN knnAlgo = new KNN();
                         try {
+                            writedata = new String();
                             knnAlgo.processKNN(instance, trainSize, testSize, k);
                             intent.putExtra("test", knnAlgo.getAlgoSummary());
                             writedata = writedata + " KNN Algorithm" + knnAlgo.getAlgoSummary();
@@ -190,6 +203,8 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                     if (dt.isChecked()) {
+                        clearRadioChecked();
+                        dt.setChecked(true);
                         algorithmCount++;
                         DecisionTree decisionTree = new DecisionTree();
                         //getting values from decision tree class
@@ -214,6 +229,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                     if (lr.isChecked()) {
+                        clearRadioChecked();
+                        lr.setChecked(true);
                         algorithmCount++;
                         LogisticRegression lr= new LogisticRegression();
                         try {
@@ -235,6 +252,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                     if (rf.isChecked()) {
+                        clearRadioChecked();
+                        rf.setChecked(true);
                         algorithmCount++;
                         Randomforest rf = new Randomforest();
                         try{
